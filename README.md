@@ -6,14 +6,15 @@ This issue is discussed in [cargo/pull/14713](https://github.com/rust-lang/cargo
 
 ## Steps to reproduce the conflict issue
 
-1. Checkout this repo.
-   The "bin" crate `deps-conflict` has very simple dependency.
+1. Checkout this repo `cd deps-conflict`.
+
+   The "bin" crate `deps-conflict` has very simple dependency [Cargo.toml](./deps-conflict/Cargo.toml).
    The crate itself is just a "hello world" and doesn't use those dependency at all.
 
-2. Setup a registry mirror as sourece replacement of `crates-io`
+3. Setup a registry mirror as sourece replacement of `crates-io`
    https://github.com/rust-lang/cargo/wiki/Third-party-registries
 
-   It's convenient to start [Kellnr ](https://kellnr.io/documentation#cratesio-proxy) locally at `localhost:8000` as a mirror. 
+   It's convenient to start [Kellnr ](https://kellnr.io/documentation#cratesio-proxy) locally at `localhost:8000` as a proxy of crates-io. 
    ```
    docker run --rm -it \
     -p 8000:8000 \
@@ -21,18 +22,10 @@ This issue is discussed in [cargo/pull/14713](https://github.com/rust-lang/cargo
     -v ./tmp/mirrordata:/opt/kdata ghcr.io/kellnr/kellnr:5.0.0
    ```
 
-   The address `localhost:8000` has been specified in the `.cargo/config.toml`
-    ```
-    [source.crates-io]
-    replace-with = "test-mirror"
+   The address `localhost:8000` is specified in the [.cargo/config.toml](./deps-conflict/.cargo/config.toml). Update the config if you use other adress for the mirror server.
 
-    [registries]
-    [registries.test-mirror]
-    index = "sparse+http://localhost:8000/api/v1/cratesio/"
-    ```
-
-3. Now build the test crate to see the result:
-   `cd deps-conflict && cargo build`
+4. Now build the crate `deps-conflict` to see the result:
+   Run `cargo build` or `cargo tree`
 
    It should fail with the following message:
     ```
@@ -59,4 +52,4 @@ This issue is discussed in [cargo/pull/14713](https://github.com/rust-lang/cargo
     ```
 
 ## Test Cargo fix by [cargo/pull/14713](https://github.com/rust-lang/cargo/pull/14713)
-The folder `deps-conflict/result-with-cargo-pr14713` contain result files generated using rust toolchain with local cargo fix.
+The folder [result-with-cargo-pr14713`](./deps-conflict/result-with-cargo-pr14713) contain result generated using rust toolchain with proposed cargo fix.
