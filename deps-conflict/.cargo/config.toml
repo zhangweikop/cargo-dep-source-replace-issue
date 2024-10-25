@@ -1,0 +1,6 @@
+[source.crates-io]
+replace-with = "test-mirror"
+
+[registries]
+[registries.test-mirror]
+index = "sparse+http://localhost:8000/api/v1/cratesio/"

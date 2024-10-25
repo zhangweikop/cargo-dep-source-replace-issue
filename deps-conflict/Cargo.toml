@@ -1,0 +1,9 @@
+[package]
+name = "deps-conflict"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde_with = { version = "3.3.0"}
+wasm-bindgen = {version = "0.2", registry = "test-mirror"}
+chrono = { version = "0.4.21", registry = "test-mirror"}
